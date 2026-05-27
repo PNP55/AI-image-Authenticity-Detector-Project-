@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sign Up – AI Image Authenticity Detector</title>
+    <link rel="icon" href="{{ url_for('static', filename='AI-Image-Detector logo final.png') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='auth.css') }}">
+</head>
+<body>
+
+    <div class="navbar">
+        <div class="logo">
+            <a href="/">
+                <img src="{{ url_for('static', filename='AI-Image-Detector logo final.png') }}" alt="logo">
+                <span>AI Image Authenticity Detector</span>
+            </a>
+        </div>
+        <div class="nav-actions">
+            <a href="/about" class="btn-about">About Us</a>
+            <a href="/login" class="btn-login">Log in</a>
+            <a href="/signup" class="btn-signup">Sign up</a>
+        </div>
+    </div>
+
+    <div class="auth-wrapper">
+        <div class="auth-card">
+
+            <h2>Create account</h2>
+            <p class="auth-sub">Start detecting AI images for free</p>
+
+            {% if error %}
+            <div class="auth-error">{{ error }}</div>
+            {% endif %}
+
+            <form action="/signup" method="post">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" name="name" placeholder="Your name" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" name="email" placeholder="you@example.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" name="password" placeholder="••••••••" required>
+                </div>
+                <div class="form-group">
+                    <label>Confirm Password</label>
+                    <input type="password" name="confirm_password" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="auth-btn">Create account</button>
+            </form>
+
+            <p class="auth-switch">
+                Already have an account? <a href="/login">Log in</a>
+            </p>
+
+        </div>
+    </div>
+
+    <div class="footer">
+        © 2026 <span>AI Image Authenticity Detector</span>
+    </div>
+
+</body>
+</html>

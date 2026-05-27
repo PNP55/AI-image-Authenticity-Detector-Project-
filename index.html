@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>AI Image Authenticity Detector</title>
+
+    <link rel="icon" href="{{ url_for('static', filename='AI-Image-Detector logo final.png') }}">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <div class="navbar">
+        <div class="logo">
+            <a href="/">
+                <img src="{{ url_for('static', filename='AI-Image-Detector logo final.png') }}" alt="logo">
+                <span>AI Image Authenticity Detector</span>
+            </a>
+        </div>
+    <div class="nav-actions">
+        <a href="/about" class="btn-about">About Us</a>
+        <a href="/login" class="btn-login">Log in</a>
+        <a href="/signup" class="btn-signup">Sign up</a>
+    </div>
+    </div>
+
+    <!-- HERO -->
+    <div class="hero">
+
+        <!-- LEFT TEXT -->
+        <div class="left">
+            <h1>Detect AI Generated Images Instantly</h1>
+            <p class="desc">
+                Upload any image and instantly detect whether it's AI-generated or real.
+            </p>
+        </div>
+
+        <!-- RIGHT UPLOAD -->
+        <div class="upload-card {% if result %}has-result{% endif %}">
+
+            <form action="/predict" method="post" enctype="multipart/form-data">
+
+                <label class="upload-box">
+                    <input type="file" name="image" id="fileInput" hidden required>
+
+                    <p id="uploadText">Drop Image Here or Upload Image 📂</p>
+                    <img id="preview">
+                </label>
+
+                <button class="analyze">Analyze</button>
+
+            </form>
+
+            {% if result %}
+            <div class="result-container">
+
+                <!-- RESULT TEXT -->
+                <div class="result">
+                    <h2 class="{% if result == 'Real' %}real{% else %}fake{% endif %}">
+                        {{ result }}
+                    </h2>
+
+                    <p style="font-size: 32px; font-weight: 700;">
+                        {{ confidence }}%
+                    </p>
+
+                    <!-- CONFIDENCE BAR -->
+                    <div style="margin-top:20px;">
+                        <p>{{ result }}</p>
+                        <div class="bar">
+                            <div class="fill"
+                                 data-confidence="{{ confidence }}"
+                                 style="background: {% if result == 'Real' %}#22c55e{% else %}#ef4444{% endif %};">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- IMAGE OUTPUT -->
+                {% if img_data %}
+                <div class="result-image">
+                    <img src="data:image/png;base64,{{ img_data }}">
+                </div>
+                {% endif %}
+
+                <!-- STATS PANEL -->
+                {% if stats %}
+                <div class="stats-panel">
+                    <div class="stats-title">
+                        <span>📊</span> Image Forensics & Diagnostics
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <p class="stat-label">Dimensions</p>
+                            <p class="stat-value">{{ stats.dimensions }}</p>
+                        </div>
+
+                        <div class="stat-item">
+                            <p class="stat-label">Aspect Ratio</p>
+                            <p class="stat-value">{{ stats.aspect_ratio }}</p>
+                        </div>
+
+                        <div class="stat-item">
+                            <p class="stat-label">File Size</p>
+                            <p class="stat-value">{{ stats.file_size }}</p>
+                        </div>
+
+                        <div class="stat-item">
+                            <p class="stat-label">Brightness</p>
+                            <p class="stat-value">
+                                {{ stats.brightness }}%
+                                <span class="stat-sub">({{ stats.brightness_label }})</span>
+                            </p>
+                        </div>
+
+                        <div class="stat-item">
+                            <p class="stat-label">Contrast</p>
+                            <p class="stat-value">
+                                {{ stats.contrast }}
+                                <span class="stat-sub">({{ stats.contrast_label }})</span>
+                            </p>
+                        </div>
+
+                        <div class="stat-item">
+                            <p class="stat-label">Variance</p>
+                            <p class="stat-value">{{ stats.variance }}</p>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+            </div>
+            {% endif %}
+
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+        © 2026 <span>AI Image Authenticity Detector</span><br>
+    </div>
+
+    <!-- JS -->
+    <script>
+        const input = document.getElementById("fileInput");
+        const preview = document.getElementById("preview");
+        const text = document.getElementById("uploadText");
+
+        input.addEventListener("change", function () {
+            const file = this.files[0];
+
+            if (file) {
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    preview.src = e.target.result;
+                    preview.style.display = "block";
+                    text.style.display = "none";
+                };
+
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // confidence bar width
+        document.querySelectorAll('.fill').forEach(el => {
+            const conf = el.getAttribute('data-confidence');
+            if (conf) {
+                el.style.width = conf + '%';
+            }
+        });
+    </script>
+
+</body>
+</html>
